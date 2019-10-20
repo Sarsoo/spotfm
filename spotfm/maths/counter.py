@@ -60,7 +60,7 @@ class Counter:
                         if song.album.uri not in [i.album.uri for i in tracks]:
                             tracks.append(song)
                     elif query_artist:
-                        if song.artists[0].uri not in [song.artists[0].uri for i in tracks]:
+                        if song.artists[0].uri not in [i.artists[0].uri for i in tracks]:
                             tracks.append(song)
                     else:
                         tracks.append(song)
