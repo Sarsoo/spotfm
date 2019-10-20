@@ -31,7 +31,12 @@ class Counter:
         else:
             logger.error('cannot process uri')
 
-    def count_playlist(self, username: str = None, uri: Uri = None, playlist: SpotifyPlaylist = None) -> int:
+    def count_playlist(self,
+                       username: str = None,
+                       uri: Uri = None,
+                       playlist: SpotifyPlaylist = None,
+                       query_album=False,
+                       query_artist=False) -> int:
 
         if uri is None and playlist is None:
             raise ValueError('no input playlist to count')
@@ -51,22 +56,22 @@ class Counter:
         for song in playlist.tracks:
             if isinstance(song, SpotifyTrack):
                 if song.uri not in [i.uri for i in tracks]:
-                    tracks.append(song)
+                    if query_album:
+                        if song.album.uri not in [i.album.uri for i in tracks]:
+                            tracks.append(song)
+                    elif query_artist:
+                        if song.artists[0].uri not in [song.artists[0].uri for i in tracks]:
+                            tracks.append(song)
+                    else:
+                        tracks.append(song)
 
         for song in tracks:
-            if username is not None:
-                fm_track = self.fmnet.get_track(name=song.name,
-                                                artist=song.artists[0].name,
-                                                username=username)
+            if query_album:
+                scrobble_count += self.count_album(username=username, album=song.album)
+            elif query_artist:
+                scrobble_count += self.count_artist(username=username, artist=song.artists[0])
             else:
-                fm_track = self.fmnet.get_track(name=song.name,
-                                                artist=song.artists[0].name,
-                                                username=self.fmnet.username)
-
-            if fm_track:
-                scrobble_count += fm_track.user_scrobbles
-            else:
-                logger.error(f'no last.fm track returned for {song}')
+                scrobble_count += self.count_track(username=username, track=song)
 
         return scrobble_count
 
@@ -88,6 +93,7 @@ class Counter:
         if fmtrack is not None:
             return fmtrack.user_scrobbles
         else:
+            logger.error(f'no album returned for {track}')
             return 0
 
     def count_album(self, username: str = None, uri: Uri = None, album: SpotifyAlbum = None) -> int:
@@ -108,6 +114,7 @@ class Counter:
         if fmalbum is not None:
             return fmalbum.user_scrobbles
         else:
+            logger.error(f'no album returned for {album}')
             return 0
 
     def count_artist(self, username: str = None, uri: Uri = None, artist: SpotifyArtist = None) -> int:
@@ -128,4 +135,5 @@ class Counter:
         if fmartist is not None:
             return fmartist.user_scrobbles
         else:
+            logger.error(f'no artist returned for {artist}')
             return 0
