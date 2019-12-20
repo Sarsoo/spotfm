@@ -1,0 +1,57 @@
+[
+  {
+    "name": "surgical summer",
+    "members": [
+      {
+        "name": "daytona",
+        "uri": "spotify:album:07bIdDDe3I3hhWpxU6tuBp"
+      },
+      {
+        "name": "ye",
+        "uri": "spotify:album:2Ek1q2haOnxVqhvVKqMvJe"
+      },
+      {
+        "name": "ksg",
+        "uri": "spotify:album:6pwuKxMUkNg673KETsXPUV"
+      },
+      {
+        "name": "nasir",
+        "uri": "spotify:album:66EwBbt2kPgugo8Wz0SKAw"
+      },
+      {
+        "name": "k.t.s.e",
+        "uri": "spotify:album:0mwf6u9KVhZDCNVyIi6JuU"
+      }
+    ]
+  },
+  {
+    "name": "madlib",
+    "members": [
+      {
+        "name": "pinata",
+        "uri": "spotify:album:43uErencdmuTRFZPG3zXL1"
+      },
+      {
+        "name": "bandana - single",
+        "uri": "spotify:album:5Bc89b9FsoOrEZf0HLS812"
+      },
+      {
+        "name": "bandana",
+        "uri": "spotify:album:31KbO7WnDp2AjPdmRTJzdf"
+      }
+    ]
+  },
+  {
+    "name": "freddie",
+    "members": [
+      {
+        "name": "freddie",
+        "uri": "spotify:artist:0Y4inQK6OespitzD6ijMwb"
+      },
+      {
+        "name": "fetti",
+        "uri": "spotify:album:3JgtFZroTUGoklTtb2xOne"
+      }
+    ]
+  }
+]
