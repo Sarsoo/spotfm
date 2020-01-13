@@ -24,7 +24,7 @@ def get_chart_of_spotify_tracks(spotnet: SpotNetwork,
         if len(spotify_search) > 0:
             spotify_chart.append(spotify_search[0])
         else:
-            logger.warning('no search tracks returned')
+            logger.debug('no search tracks returned')
 
     return spotify_chart
 
