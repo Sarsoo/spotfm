@@ -1,8 +1,8 @@
 from spotframework.net.network import Network as SpotifyNetwork
-from spotframework.model.playlist import SpotifyPlaylist
-from spotframework.model.track import SpotifyTrack
-from spotframework.model.album import SpotifyAlbum
-from spotframework.model.artist import SpotifyArtist
+from spotframework.model.playlist import FullPlaylist
+from spotframework.model.track import SimplifiedTrack
+from spotframework.model.album import SimplifiedAlbum
+from spotframework.model.artist import SimplifiedArtist
 from spotframework.model.uri import Uri
 
 from fmframework.net.network import Network as FMNetwork
@@ -34,7 +34,7 @@ class Counter:
     def count_playlist(self,
                        username: str = None,
                        uri: Uri = None,
-                       playlist: SpotifyPlaylist = None,
+                       playlist: FullPlaylist = None,
                        query_album=False,
                        query_artist=False) -> int:
 
@@ -54,28 +54,27 @@ class Counter:
 
         tracks = []
         for song in playlist.tracks:
-            if isinstance(song, SpotifyTrack):
-                if song.uri not in [i.uri for i in tracks]:
-                    if query_album:
-                        if song.album.uri not in [i.album.uri for i in tracks]:
-                            tracks.append(song)
-                    elif query_artist:
-                        if song.artists[0].uri not in [i.artists[0].uri for i in tracks]:
-                            tracks.append(song)
-                    else:
+            if song.track.uri not in [i.track.uri for i in tracks]:
+                if query_album:
+                    if song.track.album.uri not in [i.track.album.uri for i in tracks]:
                         tracks.append(song)
+                elif query_artist:
+                    if song.track.artists[0].uri not in [i.track.artists[0].uri for i in tracks]:
+                        tracks.append(song)
+                else:
+                    tracks.append(song)
 
         for song in tracks:
             if query_album:
-                scrobble_count += self.count_album(username=username, album=song.album)
+                scrobble_count += self.count_album(username=username, album=song.track.album)
             elif query_artist:
-                scrobble_count += self.count_artist(username=username, artist=song.artists[0])
+                scrobble_count += self.count_artist(username=username, artist=song.track.artists[0])
             else:
-                scrobble_count += self.count_track(username=username, track=song)
+                scrobble_count += self.count_track(username=username, track=song.track)
 
         return scrobble_count
 
-    def count_track(self, username: str = None, uri: Uri = None, track: SpotifyTrack = None) -> int:
+    def count_track(self, username: str = None, uri: Uri = None, track: SimplifiedTrack = None) -> int:
 
         if uri is None and track is None:
             raise ValueError('no track to count')
@@ -96,7 +95,7 @@ class Counter:
             logger.error(f'no album returned for {track}')
             return 0
 
-    def count_album(self, username: str = None, uri: Uri = None, album: SpotifyAlbum = None) -> int:
+    def count_album(self, username: str = None, uri: Uri = None, album: SimplifiedAlbum = None) -> int:
 
         if uri is None and album is None:
             raise ValueError('no album to count')
@@ -117,7 +116,7 @@ class Counter:
             logger.error(f'no album returned for {album}')
             return 0
 
-    def count_artist(self, username: str = None, uri: Uri = None, artist: SpotifyArtist = None) -> int:
+    def count_artist(self, username: str = None, uri: Uri = None, artist: SimplifiedArtist = None) -> int:
 
         if uri is None and artist is None:
             raise ValueError('no artist to count')
