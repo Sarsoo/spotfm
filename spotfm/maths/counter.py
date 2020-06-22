@@ -1,4 +1,4 @@
-from spotframework.net.network import Network as SpotifyNetwork
+from spotframework.net.network import Network as SpotifyNetwork, SpotifyNetworkException
 from spotframework.model.playlist import FullPlaylist
 from spotframework.model.track import SimplifiedTrack
 from spotframework.model.album import SimplifiedAlbum
@@ -43,12 +43,20 @@ class Counter:
 
         if playlist is not None:
             if playlist.has_tracks() is False:
-                playlist.tracks = self.spotnet.get_playlist_tracks(uri=playlist.uri)
+                try:
+                    playlist.tracks = self.spotnet.get_playlist_tracks(uri=playlist.uri)
+                except SpotifyNetworkException as e:
+                    logger.error(f'error occured during playlist track retrieval - {e}')
+                    return 0
 
         if uri is not None:
             if uri.object_type != Uri.ObjectType.playlist:
                 raise ValueError('uri not a playlist')
-            playlist = self.spotnet.get_playlist(uri=uri)
+            try:
+                playlist = self.spotnet.get_playlist(uri=uri, tracks=True)
+            except SpotifyNetworkException as e:
+                logger.error(f'error occured during playlist retrieval - {e}')
+                return 0
 
         scrobble_count = 0
 
@@ -82,7 +90,11 @@ class Counter:
         if uri is not None:
             if uri.object_type != Uri.ObjectType.track:
                 raise ValueError('uri not a track')
-            track = self.spotnet.get_track(uri=uri)
+            try:
+                track = self.spotnet.get_track(uri=uri)
+            except SpotifyNetworkException as e:
+                logger.error(f'error occured during track retrieval - {e}')
+                return 0
 
         if username is not None:
             fmtrack = self.fmnet.get_track(name=track.name, artist=track.artists[0].name, username=username)
@@ -103,7 +115,11 @@ class Counter:
         if uri is not None:
             if uri.object_type != Uri.ObjectType.album:
                 raise ValueError('uri not an album')
-            album = self.spotnet.get_album(uri=uri)
+            try:
+                album = self.spotnet.get_album(uri=uri)
+            except SpotifyNetworkException as e:
+                logger.error(f'error occured during album retrieval - {e}')
+                return 0
 
         if username is not None:
             fmalbum = self.fmnet.get_album(name=album.name, artist=album.artists[0].name, username=username)
@@ -124,7 +140,11 @@ class Counter:
         if uri is not None:
             if uri.object_type != Uri.ObjectType.artist:
                 raise ValueError('uri not an artist')
-            artist = self.spotnet.get_artist(uri=uri)
+            try:
+                artist = self.spotnet.get_artist(uri=uri)
+            except SpotifyNetworkException as e:
+                logger.error(f'error occured during artist retrieval - {e}')
+                return 0
 
         if username is not None:
             fmartist = self.fmnet.get_artist(name=artist.name, username=username)

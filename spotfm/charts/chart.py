@@ -1,4 +1,4 @@
-from spotframework.net.network import Network as SpotNetwork
+from spotframework.net.network import Network as SpotNetwork, SpotifyNetworkException
 from spotframework.model.uri import Uri
 from fmframework.net.network import Network as FmNetwork
 import logging
@@ -17,14 +17,17 @@ def get_chart_of_spotify_tracks(spotnet: SpotNetwork,
 
     spotify_chart = []
     for track in chart:
-        spotify_search = spotnet.search(query_types=[Uri.ObjectType.track],
-                                        track=track.name,
-                                        artist=track.artist.name,
-                                        response_limit=5).tracks
-        if len(spotify_search) > 0:
-            spotify_chart.append(spotify_search[0])
-        else:
-            logger.debug('no search tracks returned')
+        try:
+            spotify_search = spotnet.search(query_types=[Uri.ObjectType.track],
+                                            track=track.name,
+                                            artist=track.artist.name,
+                                            response_limit=5).tracks
+            if len(spotify_search) > 0:
+                spotify_chart.append(spotify_search[0])
+            else:
+                logger.debug('no search tracks returned')
+        except SpotifyNetworkException as e:
+            logger.error(f'error during search function - {e}')
 
     return spotify_chart
 
