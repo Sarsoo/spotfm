@@ -5,7 +5,7 @@ from spotframework.model.album import SimplifiedAlbum
 from spotframework.model.artist import SimplifiedArtist
 from spotframework.model.uri import Uri
 
-from fmframework.net.network import Network as FMNetwork
+from fmframework.net.network import Network as FMNetwork, LastFMNetworkException
 
 import logging
 
@@ -96,15 +96,13 @@ class Counter:
                 logger.error(f'error occured during track retrieval - {e}')
                 return 0
 
-        if username is not None:
-            fmtrack = self.fmnet.get_track(name=track.name, artist=track.artists[0].name, username=username)
-        else:
-            fmtrack = self.fmnet.get_track(name=track.name, artist=track.artists[0].name, username=self.fmnet.username)
-
-        if fmtrack is not None:
+        try:
+            fmtrack = self.fmnet.get_track(name=track.name,
+                                           artist=track.artists[0].name,
+                                           username=username or self.fmnet.username)
             return fmtrack.user_scrobbles
-        else:
-            logger.error(f'no album returned for {track}')
+        except LastFMNetworkException as e:
+            logger.error(f'error occured during track retrieval - {e}')
             return 0
 
     def count_album(self, username: str = None, uri: Uri = None, album: SimplifiedAlbum = None) -> int:
@@ -121,15 +119,13 @@ class Counter:
                 logger.error(f'error occured during album retrieval - {e}')
                 return 0
 
-        if username is not None:
-            fmalbum = self.fmnet.get_album(name=album.name, artist=album.artists[0].name, username=username)
-        else:
-            fmalbum = self.fmnet.get_album(name=album.name, artist=album.artists[0].name, username=self.fmnet.username)
-
-        if fmalbum is not None:
+        try:
+            fmalbum = self.fmnet.get_album(name=album.name,
+                                           artist=album.artists[0].name,
+                                           username=username or self.fmnet.username)
             return fmalbum.user_scrobbles
-        else:
-            logger.error(f'no album returned for {album}')
+        except LastFMNetworkException as e:
+            logger.error(f'error occured during album retrieval - {e}')
             return 0
 
     def count_artist(self, username: str = None, uri: Uri = None, artist: SimplifiedArtist = None) -> int:
@@ -146,13 +142,9 @@ class Counter:
                 logger.error(f'error occured during artist retrieval - {e}')
                 return 0
 
-        if username is not None:
-            fmartist = self.fmnet.get_artist(name=artist.name, username=username)
-        else:
-            fmartist = self.fmnet.get_artist(name=artist.name, username=self.fmnet.username)
-
-        if fmartist is not None:
+        try:
+            fmartist = self.fmnet.get_artist(name=artist.name, username=username or self.fmnet.username)
             return fmartist.user_scrobbles
-        else:
-            logger.error(f'no artist returned for {artist}')
+        except LastFMNetworkException as e:
+            logger.error(f'error occured during artist retrieval - {e}')
             return 0

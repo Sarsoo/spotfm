@@ -5,7 +5,7 @@ import json
 from spotframework.net.network import Network as Spotnet
 from spotframework.engine.playlistengine import PlaylistEngine
 from spotframework.model.uri import Uri
-from fmframework.net.network import Network as Fmnet
+from fmframework.net.network import Network as Fmnet, LastFMNetworkException
 from spotfm.maths.counter import Counter
 
 logger = logging.getLogger(__name__)
@@ -29,7 +29,11 @@ class Stats(Cmd):
         if in_string is None or len(in_string) < 2:
             in_string = input('uri group/uri>')
 
-        user_total = self.fmnet.get_user_scrobble_count()
+        try:
+            user_total = self.fmnet.get_user_scrobble_count()
+        except LastFMNetworkException as e:
+            logger.error(f'error occured during scrobble count retrieval - {e}')
+            user_total = 0
 
         total = 0
         try:

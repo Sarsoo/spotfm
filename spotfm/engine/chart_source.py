@@ -1,4 +1,4 @@
-from fmframework.net.network import Network as FmNet
+from fmframework.net.network import Network as FmNet, LastFMNetworkException
 from spotframework.net.network import Network as SpotNet
 
 from spotframework.model.uri import Uri
@@ -33,12 +33,10 @@ class ChartSource(TrackSource):
     def process(self, params: Params, uris: List[Uri] = None):
         # TODO add processor support?
 
-        tracks = get_chart_of_spotify_tracks(spotnet=self.net,
-                                             fmnet=self.fmnet,
-                                             period=params.chart_range,
-                                             limit=params.limit)
-
-        if tracks is not None and len(tracks) > 0:
-            return tracks
-        else:
-            logger.error('no tracks returned')
+        try:
+            return get_chart_of_spotify_tracks(spotnet=self.net,
+                                               fmnet=self.fmnet,
+                                               period=params.chart_range,
+                                               limit=params.limit)
+        except LastFMNetworkException as e:
+            logger.error(f'error occured during chart retrieval - {e}')
