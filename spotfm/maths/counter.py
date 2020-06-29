@@ -100,7 +100,11 @@ class Counter:
             fmtrack = self.fmnet.get_track(name=track.name,
                                            artist=track.artists[0].name,
                                            username=username or self.fmnet.username)
-            return fmtrack.user_scrobbles
+            if fmtrack is not None:
+                return fmtrack.user_scrobbles
+            else:
+                logger.error(f'no track returned for {track}')
+                return 0
         except LastFMNetworkException as e:
             logger.error(f'error occured during track retrieval - {e}')
             return 0
@@ -123,7 +127,11 @@ class Counter:
             fmalbum = self.fmnet.get_album(name=album.name,
                                            artist=album.artists[0].name,
                                            username=username or self.fmnet.username)
-            return fmalbum.user_scrobbles
+            if fmalbum is not None:
+                return fmalbum.user_scrobbles
+            else:
+                logger.error(f'no track returned for {album}')
+                return 0
         except LastFMNetworkException as e:
             logger.error(f'error occured during album retrieval - {e}')
             return 0
@@ -144,7 +152,11 @@ class Counter:
 
         try:
             fmartist = self.fmnet.get_artist(name=artist.name, username=username or self.fmnet.username)
-            return fmartist.user_scrobbles
+            if fmartist is not None:
+                return fmartist.user_scrobbles
+            else:
+                logger.error(f'no track returned for {artist}')
+                return 0
         except LastFMNetworkException as e:
             logger.error(f'error occured during artist retrieval - {e}')
             return 0
