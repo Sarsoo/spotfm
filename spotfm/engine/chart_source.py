@@ -38,5 +38,5 @@ class ChartSource(TrackSource):
                                                fmnet=self.fmnet,
                                                period=params.chart_range,
                                                limit=params.limit)
-        except LastFMNetworkException as e:
-            logger.error(f'error occured during chart retrieval - {e}')
+        except LastFMNetworkException:
+            logger.exception(f'error occured during chart retrieval')

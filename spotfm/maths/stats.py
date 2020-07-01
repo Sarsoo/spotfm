@@ -31,8 +31,8 @@ class Stats(Cmd):
 
         try:
             user_total = self.fmnet.get_user_scrobble_count()
-        except LastFMNetworkException as e:
-            logger.error(f'error occured during scrobble count retrieval - {e}')
+        except LastFMNetworkException:
+            logger.exception(f'error occured during scrobble count retrieval')
             user_total = 0
 
         total = 0

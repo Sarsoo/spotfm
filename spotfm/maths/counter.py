@@ -45,8 +45,8 @@ class Counter:
             if playlist.has_tracks() is False:
                 try:
                     playlist.tracks = self.spotnet.get_playlist_tracks(uri=playlist.uri)
-                except SpotifyNetworkException as e:
-                    logger.error(f'error occured during playlist track retrieval - {e}')
+                except SpotifyNetworkException:
+                    logger.exception(f'error occured during playlist track retrieval')
                     return 0
 
         if uri is not None:
@@ -54,8 +54,8 @@ class Counter:
                 raise ValueError('uri not a playlist')
             try:
                 playlist = self.spotnet.get_playlist(uri=uri, tracks=True)
-            except SpotifyNetworkException as e:
-                logger.error(f'error occured during playlist retrieval - {e}')
+            except SpotifyNetworkException:
+                logger.exception(f'error occured during playlist retrieval')
                 return 0
 
         scrobble_count = 0
@@ -92,8 +92,8 @@ class Counter:
                 raise ValueError('uri not a track')
             try:
                 track = self.spotnet.get_track(uri=uri)
-            except SpotifyNetworkException as e:
-                logger.error(f'error occured during track retrieval - {e}')
+            except SpotifyNetworkException:
+                logger.exception(f'error occured during track retrieval')
                 return 0
 
         try:
@@ -105,8 +105,8 @@ class Counter:
             else:
                 logger.error(f'no track returned for {track}')
                 return 0
-        except LastFMNetworkException as e:
-            logger.error(f'error occured during track retrieval - {e}')
+        except LastFMNetworkException:
+            logger.exception(f'error occured during track retrieval')
             return 0
 
     def count_album(self, username: str = None, uri: Uri = None, album: SimplifiedAlbum = None) -> int:
@@ -119,8 +119,8 @@ class Counter:
                 raise ValueError('uri not an album')
             try:
                 album = self.spotnet.get_album(uri=uri)
-            except SpotifyNetworkException as e:
-                logger.error(f'error occured during album retrieval - {e}')
+            except SpotifyNetworkException:
+                logger.exception(f'error occured during album retrieval')
                 return 0
 
         try:
@@ -132,8 +132,8 @@ class Counter:
             else:
                 logger.error(f'no track returned for {album}')
                 return 0
-        except LastFMNetworkException as e:
-            logger.error(f'error occured during album retrieval - {e}')
+        except LastFMNetworkException:
+            logger.exception(f'error occured during album retrieval')
             return 0
 
     def count_artist(self, username: str = None, uri: Uri = None, artist: SimplifiedArtist = None) -> int:
@@ -146,8 +146,8 @@ class Counter:
                 raise ValueError('uri not an artist')
             try:
                 artist = self.spotnet.get_artist(uri=uri)
-            except SpotifyNetworkException as e:
-                logger.error(f'error occured during artist retrieval - {e}')
+            except SpotifyNetworkException:
+                logger.exception(f'error occured during artist retrieval')
                 return 0
 
         try:
@@ -157,6 +157,6 @@ class Counter:
             else:
                 logger.error(f'no track returned for {artist}')
                 return 0
-        except LastFMNetworkException as e:
-            logger.error(f'error occured during artist retrieval - {e}')
+        except LastFMNetworkException:
+            logger.exception(f'error occured during artist retrieval')
             return 0

@@ -27,10 +27,10 @@ def get_chart_of_spotify_tracks(spotnet: SpotNetwork,
                     spotify_chart.append(spotify_search[0])
                 else:
                     logger.debug('no search tracks returned')
-            except SpotifyNetworkException as e:
-                logger.error(f'error during search function - {e}')
+            except SpotifyNetworkException:
+                logger.exception(f'error during search function')
 
         return spotify_chart
-    except LastFMNetworkException as e:
-        logger.error(f'error during chart retrieval function - {e}')
+    except LastFMNetworkException:
+        logger.exception(f'error during chart retrieval function')
         return []
