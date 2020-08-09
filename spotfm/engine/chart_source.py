@@ -5,7 +5,7 @@ from spotframework.model.uri import Uri
 from spotframework.engine.playlistengine import TrackSource, SourceParameter
 from spotframework.engine.processor.abstract import AbstractProcessor
 
-from spotfm.charts.chart import get_chart_of_spotify_tracks
+from spotfm.chart import get_chart_of_spotify_tracks
 
 from typing import List
 import logging
