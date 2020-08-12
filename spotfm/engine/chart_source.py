@@ -5,7 +5,7 @@ from spotframework.model.uri import Uri
 from spotframework.engine.playlistengine import TrackSource, SourceParameter
 from spotframework.engine.processor.abstract import AbstractProcessor
 
-from spotfm.chart import get_chart_of_spotify_tracks
+from spotfm.chart import map_lastfm_track_chart_to_spotify
 
 from typing import List
 import logging
@@ -34,9 +34,9 @@ class ChartSource(TrackSource):
         # TODO add processor support?
 
         try:
-            return get_chart_of_spotify_tracks(spotnet=self.net,
-                                               fmnet=self.fmnet,
-                                               period=params.chart_range,
-                                               limit=params.limit)
+            return map_lastfm_track_chart_to_spotify(spotnet=self.net,
+                                                     fmnet=self.fmnet,
+                                                     period=params.chart_range,
+                                                     limit=params.limit)
         except LastFMNetworkException:
             logger.exception(f'error occured during chart retrieval')

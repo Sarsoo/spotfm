@@ -6,15 +6,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def get_chart_of_spotify_tracks(spotnet: SpotNetwork,
-                                fmnet: FmNetwork,
-                                period: FmNetwork.Range,
-                                limit: int,
-                                username: str = None):
+def map_lastfm_track_chart_to_spotify(spotnet: SpotNetwork,
+                                      fmnet: FmNetwork,
+                                      period: FmNetwork.Range,
+                                      limit: int,
+                                      username: str = None):
     logger.info(f'pulling {period.name} chart')
 
     try:
-        chart = fmnet.get_top_tracks(period=period, username=username, limit=limit)
+        chart = fmnet.top_tracks(period=period, username=username or fmnet.username, limit=limit)
 
         spotify_chart = []
         for track in chart:
@@ -22,7 +22,7 @@ def get_chart_of_spotify_tracks(spotnet: SpotNetwork,
                 spotify_search = spotnet.search(query_types=[Uri.ObjectType.track],
                                                 track=track.name,
                                                 artist=track.artist.name,
-                                                response_limit=5).tracks
+                                                response_limit=1).tracks
                 if len(spotify_search) > 0:
                     spotify_chart.append(spotify_search[0])
                 else:

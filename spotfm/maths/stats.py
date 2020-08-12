@@ -30,7 +30,7 @@ class Stats(Cmd):
             in_string = input('uri group/uri>')
 
         try:
-            user_total = self.fmnet.get_user_scrobble_count()
+            user_total = self.fmnet.user_scrobble_count()
         except LastFMNetworkException:
             logger.exception(f'error occured during scrobble count retrieval')
             user_total = 0

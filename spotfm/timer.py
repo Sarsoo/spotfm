@@ -61,8 +61,8 @@ def time_artist(spotnet: SpotNet, artist: str, username: str, fmnet: FmNet = Non
                 return_tracks: bool = False) -> int:
     logger.info(f'timing {artist} for {username}')
 
-    fmtracks = LibraryScraper.get_scrobbled_tracks(username=username, artist=artist, whole_track=False,
-                                                   from_date=from_date, to_date=to_date, date_preset=date_preset)
+    fmtracks = LibraryScraper.artist_tracks(username=username, artist=artist, whole_track=False,
+                                            from_date=from_date, to_date=to_date, date_preset=date_preset)
 
     return time_track_collection(tracks=fmtracks, spotnet=spotnet, username=username, fmnet=fmnet,
                                  return_tracks=return_tracks)
@@ -73,8 +73,8 @@ def time_album(spotnet: SpotNet, artist: str, album: str, username: str, fmnet: 
                return_tracks: bool = False) -> int:
     logger.info(f'timing {album} / {artist} for {username}')
 
-    fmtracks = LibraryScraper.get_albums_tracks(username=username, artist=artist, album=album, whole_track=False,
-                                                from_date=from_date, to_date=to_date, date_preset=date_preset)
+    fmtracks = LibraryScraper.album_tracks(username=username, artist=artist, album=album, whole_track=False,
+                                           from_date=from_date, to_date=to_date, date_preset=date_preset)
 
     return time_track_collection(tracks=fmtracks, spotnet=spotnet, username=username, fmnet=fmnet,
                                  return_tracks=return_tracks)
@@ -85,8 +85,8 @@ def time_track(spotnet: SpotNet, artist: str, track: str, username: str, fmnet: 
                return_tracks: bool = False) -> int:
     logger.info(f'timing {track} / {artist} for {username}')
 
-    fmtracks = LibraryScraper.get_track_scrobbles(username=username, artist=artist, track=track, whole_track=False,
-                                                  from_date=from_date, to_date=to_date, date_preset=date_preset)
+    fmtracks = LibraryScraper.track_scrobbles(username=username, artist=artist, track=track, whole_track=False,
+                                              from_date=from_date, to_date=to_date, date_preset=date_preset)
     if fmtracks is not None:
         if len(fmtracks) == 0:
             return 0
@@ -112,7 +112,7 @@ def time_track_collection(tracks, spotnet: SpotNet, username: str, fmnet: FmNet 
                     logger.error(f'no track returned for search {track.name} / {track.artist.name} / {username}'
                                  f', pulling last.fm track')
 
-                    fmtrack = fmnet.get_track(name=track.name, artist=track.artist.name, username=username)
+                    fmtrack = fmnet.track(name=track.name, artist=track.artist.name, username=username)
 
                     if fmtrack is not None and fmtrack.duration is not None and fmtrack.duration > 0:
                         track_pairs.append((track, fmtrack))

@@ -1,6 +1,6 @@
 from spotframework.net.network import Network as Spotnet, NetworkUser
 from fmframework.net.network import Network as Fmnet
-from spotfm.timer import time_artist
+from spotfm.timer import time, seconds_to_time_str
 
 import logging
 import os
@@ -44,20 +44,11 @@ while len(fmuser) == 0:
 
 fmnet = Fmnet(username=fmuser, api_key=fmclient)
 
-def convert(seconds):
-    seconds = seconds % (24 * 3600)
-    hour = seconds // 3600
-    seconds %= 3600
-    minutes = seconds // 60
-    seconds %= 60
-
-    return "%d:%02d:%02d" % (hour, minutes, seconds)
-
-top_artists = fmnet.get_top_artists(period=Fmnet.Range.OVERALL, limit=10)
+top_artists = fmnet.top_artists(period=Fmnet.Range.OVERALL, limit=10)
 
 artist_counts = dict()
 for artist in top_artists:
-    artist_counts[artist.name] = time_artist(spotnet=spotnet, fmnet=fmnet, artist=artist.name, username=fmnet.username)
+    artist_counts[artist.name] = time(spotnet=spotnet, fmnet=fmnet, artist=artist.name, username=fmnet.username)
 
 for name, count in artist_counts.items():
-    print(name, f'{count}ms,', f'{count/1000}s,', convert(count/1000))
+    print(name, f'{count}ms,', f'{count/1000}s,', seconds_to_time_str(milliseconds=count))
