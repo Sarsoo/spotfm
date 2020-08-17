@@ -109,7 +109,7 @@ def time_track_collection(tracks, spotnet: SpotNet, username: str, fmnet: FmNet 
                 track_pairs.append((track, spottrack[0]))
             else:
                 if fmnet is not None:
-                    logger.error(f'no track returned for search {track.name} / {track.artist.name} / {username}'
+                    logger.debug(f'no track returned for search {track.name} / {track.artist.name} / {username}'
                                  f', pulling last.fm track')
 
                     fmtrack = fmnet.track(name=track.name, artist=track.artist.name, username=username)
@@ -117,7 +117,7 @@ def time_track_collection(tracks, spotnet: SpotNet, username: str, fmnet: FmNet 
                     if fmtrack is not None and fmtrack.duration is not None and fmtrack.duration > 0:
                         track_pairs.append((track, fmtrack))
                     else:
-                        logger.error(f'no duration found on last.fm for {track.name} / {track.artist.name} / {username}')
+                        logger.warning(f'no duration found on last.fm for {track.name} / {track.artist.name} / {username}')
                 else:
                     logger.error(f'no track returned for search {track.name} / {track.artist.name} / {username}'
                                  f', no fmnet to use as fallback')
