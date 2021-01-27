@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "spotfm"
+version = "1.0.0"
+description = "Interface functions for spotframework and fmframework. Maths functions among others"
+authors = ["andy <andy@sarsoo.xyz>"]
+repository = "https://github.com/Sarsoo/spotfm"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+spotframework = { path = "../spotframework" }
+fmframework = { path = "../fmframework" }
+
+[tool.poetry.dev-dependencies]
+pylint = "2.5.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
