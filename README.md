@@ -1,6 +1,8 @@
 spotfm
 =============
 
+![Python Tests](https://github.com/sarsoo/spotfm/workflows/Tests/badge.svg)
+
 Utility functions sitting on top of [spotframework](https://github.com/Sarsoo/spotframework) and [fmframework](https://github.com/Sarsoo/pyspotframework).
 
 ## Track Chart Source
