@@ -8,11 +8,16 @@ repository = "https://github.com/Sarsoo/spotfm"
 [tool.poetry.dependencies]
 python = "^3.8"
 
-spotframework = { path = "../spotframework" }
-fmframework = { path = "../fmframework" }
+spotframework = { git = "https://github.com/Sarsoo/spotframework.git" }
+fmframework = { git = "https://github.com/Sarsoo/pyfmframework.git" }
 
 [tool.poetry.dev-dependencies]
-pylint = "2.5.3"
+pylint = "^2.5.3"
+flake8 = "^3.8.4"
+
+[tool.poetry.scripts]
+test = 'scripts:test'
+testv = 'scripts:testv'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
